@@ -61,6 +61,15 @@
 #   This is a left side hash  to be merged with cobbler_modules_config hash to
 #   build config_modules file  for cobbler
 #
+# @param distros
+#   Creates cobbler_distro resources
+# @param repos
+#   Creates cobbler_repo resources
+# @param profiles
+#   Creates cobbler_profile resources
+# @param systems
+#   Creates cobbler_system resources
+#
 # @author Anton Baranov <abaranov@linuxfoundation.org>
 class cobbler (
   Hash $cobbler_config              = {},
@@ -95,6 +104,10 @@ class cobbler (
   String $config_modules            = $cobbler::params::config_modules,
   Hash $default_cobbler_config      = $cobbler::params::default_cobbler_config,
   Hash $default_modules_config      = $cobbler::params::default_modules_config,
+  Stdlib::CreateResources $distros = {},
+  Stdlib::CreateResources $repos = {},
+  Stdlib::CreateResources $profiles = {},
+  Stdlib::CreateResources $systems = {},
 ) inherits cobbler::params {
   class { 'cobbler::install':
     package        => $package,
@@ -119,4 +132,20 @@ class cobbler (
   Class['cobbler::install']
   -> Class['cobbler::config']
   ~> Class['cobbler::service']
+
+  $distros.each |$key, $values| {
+    cobbler_distro { $key: * => $values }
+  }
+
+  $repos.each |$key, $values| {
+    cobbler_repo { $key: * => $values }
+  }
+
+  $profiles.each |$key, $values| {
+    cobbler_profile { $key: * => $values }
+  }
+
+  $systems.each |$key, $values| {
+    cobbler_system { $key: * => $values }
+  }
 }

@@ -46,6 +46,10 @@ The following parameters are available in the `cobbler` class:
 * [`config_modules`](#-cobbler--config_modules)
 * [`default_cobbler_config`](#-cobbler--default_cobbler_config)
 * [`default_modules_config`](#-cobbler--default_modules_config)
+* [`distros`](#-cobbler--distros)
+* [`repos`](#-cobbler--repos)
+* [`profiles`](#-cobbler--profiles)
+* [`systems`](#-cobbler--systems)
 
 ##### <a name="-cobbler--cobbler_config"></a>`cobbler_config`
 
@@ -211,6 +215,38 @@ This is a left side hash  to be merged with cobbler_modules_config hash to
 build config_modules file  for cobbler
 
 Default value: `$cobbler::params::default_modules_config`
+
+##### <a name="-cobbler--distros"></a>`distros`
+
+Data type: `Stdlib::CreateResources`
+
+Creates cobbler_distro resources
+
+Default value: `{}`
+
+##### <a name="-cobbler--repos"></a>`repos`
+
+Data type: `Stdlib::CreateResources`
+
+Creates cobbler_repo resources
+
+Default value: `{}`
+
+##### <a name="-cobbler--profiles"></a>`profiles`
+
+Data type: `Stdlib::CreateResources`
+
+Creates cobbler_profile resources
+
+Default value: `{}`
+
+##### <a name="-cobbler--systems"></a>`systems`
+
+Data type: `Stdlib::CreateResources`
+
+Creates cobbler_system resources
+
+Default value: `{}`
 
 ### <a name="cobbler--config"></a>`cobbler::config`
 
