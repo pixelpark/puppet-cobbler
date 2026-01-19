@@ -445,6 +445,12 @@ Sets the architecture for the PXE bootloader
 
 Default value: `x86_64`
 
+##### `autoinstall_meta`
+
+Sets variables available for use in templates
+
+Default value: `{}`
+
 ##### `comment`
 
 An optional comment to associate with this distro
@@ -464,12 +470,6 @@ An absolute filesystem path to a initrd image
 ##### `kernel`
 
 An absolute filesystem path to a kernel image
-
-##### `ksmeta`
-
-Sets variables available for use in templates
-
-Default value: `{}`
 
 ##### `owners`
 
@@ -508,6 +508,16 @@ Puppet type for cobbler profile object
 
 The following properties are available in the `cobbler_profile` type.
 
+##### `autoinstall`
+
+Path to autoinstall template
+
+##### `autoinstall_meta`
+
+Sets variables available for use in templates
+
+Default value: `{}`
+
 ##### `dhcp_tag`
 
 DHCP tags for multiple networks usage
@@ -526,25 +536,15 @@ The basic property that the resource should be in.
 
 Default value: `present`
 
-##### `kickstart`
-
-Path to kickstart template
-
-##### `kopts`
+##### `kernel_options`
 
 Kernel Options
 
 Default value: `{}`
 
-##### `kopts_post`
+##### `kernel_options_post`
 
 Governs kernel options on the installed OS
-
-Default value: `{}`
-
-##### `ksmeta`
-
-Sets variables available for use in templates
 
 Default value: `{}`
 

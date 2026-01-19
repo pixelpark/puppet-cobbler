@@ -51,12 +51,12 @@ Puppet::Type.newtype(:cobbler_distro) do
     end
   end
 
-  newproperty(:ksmeta) do
+  newproperty(:autoinstall_meta) do
     desc "Sets variables available for use in templates"
     defaultto({})
     validate do |value|
       unless value.is_a? Hash
-        raise ArgumentError, "ksmeta parameter is not a hash"
+        raise ArgumentError, "autoinstall_meta parameter is not a hash"
       end
     end
     def change_to_s(currentvalue, newvalue)

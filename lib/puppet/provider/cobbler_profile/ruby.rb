@@ -1,8 +1,7 @@
-require 'xmlrpc/client'
-require 'fileutils'
+require 'json'
 
 Puppet::Type.type(:cobbler_profile).provide(:ruby) do
-  desc "Provides cobbler profile via cobbler_api"
+  desc "Provides cobbler profile via json file artifacts"
 
   # Supports redhat only
   confine    :osfamily => :redhat
@@ -18,11 +17,9 @@ Puppet::Type.type(:cobbler_profile).provide(:ruby) do
   # Resources discovery
   def self.instances
     profiles = []
-    cserver = XMLRPC::Client.new2('http://127.0.0.1/cobbler_api')
-    xmlresult = cserver.call('get_profiles')
-
-    # get properties of current system to @property_hash
-    xmlresult.each do |profile|
+    Dir.glob('/var/lib/cobbler/collections/profiles/*\.json').each do |file|
+      # get properties of current repo to @property_hash
+      repo = JSON.parse(File.read(file))
       profiles << new(
         :name                  => profile["name"],
         :ensure                => :present,
@@ -30,10 +27,10 @@ Puppet::Type.type(:cobbler_profile).provide(:ruby) do
         :dhcp_tag              => profile["dhcp_tag"],
         :name_servers          => profile["name_servers"],
         :name_servers_search   => profile["name_servers_search"],
-        :kickstart             => profile["kickstart"],
-        :kopts                 => profile["kernel_options"],
-        :kopts_post            => profile["kernel_options_post"],
-        :ksmeta                => profile["ks_meta"],
+        :autoinstall           => profile["autoinstall"],
+        :kernel_options        => profile["kernel_options"],
+        :kernel_options_post   => profile["kernel_options_post"],
+        :autoinstall_meta      => profile["autoinstall_meta"],
         :repos                 => profile["repos"],
         :virt_cpus             => profile["virt_cpus"],
         :virt_ram              => profile["virt_ram"],
@@ -71,11 +68,11 @@ Puppet::Type.type(:cobbler_profile).provide(:ruby) do
       "dhcp_tag",
       "name_servers",
       "name_servers_search",
-      "kickstart",
+      "autoinstall",
       "repos",
-      "kopts",
-      "kopts_post",
-      "ksmeta",
+      "kernel_options",
+      "kernel_options_post",
+      "autoinstall_meta",
       "virt_cpus",
       "virt_type",
     ]
@@ -131,9 +128,9 @@ Puppet::Type.type(:cobbler_profile).provide(:ruby) do
   end
 
   # Setters
-  def kickstart=(value)
+  def autoinstall=(value)
     raise ArgumentError, '%s: not exists' % value unless File.exists? value
-    self.set_field("kickstart", value)
+    self.set_field("autoinstall", value)
   end
 
   def distro=(value)
@@ -152,16 +149,16 @@ Puppet::Type.type(:cobbler_profile).provide(:ruby) do
     self.set_field("name_servers_search", value)
   end
 
-  def kopts=(value)
-    self.set_kernel_options("kopts", value)
+  def kernel_options=(value)
+    self.set_kernel_options("kernel_options", value)
   end
 
-  def kopts_post=(value)
-    self.set_kernel_options("kopts_post", value)
+  def kernel_options_post=(value)
+    self.set_kernel_options("kernel_options_post", value)
   end
 
-  def ksmeta=(value)
-    self.set_field("ksmeta", value)
+  def autoinstall_meta=(value)
+    self.set_field("autoinstall_meta", value)
   end
 
   def repos=(value)

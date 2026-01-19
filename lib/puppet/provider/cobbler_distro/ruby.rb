@@ -1,8 +1,7 @@
-require 'xmlrpc/client'
-require 'fileutils'
+require 'json'
 
 Puppet::Type.type(:cobbler_distro).provide(:ruby) do
-  desc "Provides cobbler distro via cobbler_api"
+  desc "Provides cobbler distro via json file artifacts"
 
   # Supports redhat only
   confine    :osfamily => :redhat
@@ -17,18 +16,16 @@ Puppet::Type.type(:cobbler_distro).provide(:ruby) do
 
   # Resources discovery
   def self.instances
-    distros = []
-    cserver = XMLRPC::Client.new2('http://127.0.0.1/cobbler_api')
-    xmlresult = cserver.call('get_distros')
-
-    # get properties of current system to @property_hash
-    xmlresult.each do |distro|
+    distros = []    
+    Dir.glob('/var/lib/cobbler/collections/distros/*\.json').each do |file|
+      # get properties of current distro to @property_hash
+      distro = JSON.parse(File.read(file))
       distros << new(
         :name    => distro['name'],
         :ensure  => :present,
         :arch    => distro['arch'],
         :kernel  => distro['kernel'],
-        :ksmeta  => distro['ks_meta'],
+        :autoinstall_meta  => distro['autoinstall_meta'],
         :initrd  => distro['initrd'],
         :comment => distro['comment'],
         :owners  => distro['owners']
@@ -154,7 +151,7 @@ Puppet::Type.type(:cobbler_distro).provide(:ruby) do
     self.set_field("arch", value)
   end
 
-  def ksmeta=(value)
-    self.set_field("ksmeta", value)
+  def autoinstall_meta=(value)
+    self.set_field("autoinstall_meta", value)
   end
 end

@@ -17,6 +17,8 @@
 This module manages installation and configuration cobbler itself as well as
 cobbler objects such as distros, profiles, systems and repos.
 
+Note: This version only supports Cobbler >`3.x`. For older Cobbler versions see `v0.3.3` and before.
+
 ## Module Description
 
 Module installs cobbler servers. Module performs cobbler configuration,
