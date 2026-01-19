@@ -9,7 +9,6 @@
 * [`cobbler`](#cobbler): Class manages cobbler installation and configuraiton
 * [`cobbler::config`](#cobbler--config): Manages configuration files for cobbler
 * [`cobbler::install`](#cobbler--install): Installs packages required to deploy cobbler
-* [`cobbler::params`](#cobbler--params): Defines default values for variables inside whole cobbler class
 * [`cobbler::service`](#cobbler--service): Manages cobbler service
 
 ### Defined types
@@ -94,7 +93,7 @@ Enum[
 
 The state of puppet resources within the module.
 
-Default value: `$cobbler::params::ensure`
+Default value: `'present'`
 
 ##### <a name="-cobbler--package"></a>`package`
 
@@ -109,7 +108,15 @@ Variant[
 
 The package name or array of packages that provides cobbler.
 
-Default value: `$cobbler::params::package`
+Default value:
+
+```puppet
+[
+    'cobbler',
+    'syslinux',
+    'syslinux-tftpboot',
+  ]
+```
 
 ##### <a name="-cobbler--package_ensure"></a>`package_ensure`
 
@@ -128,7 +135,7 @@ Enum[
 
 The state of the package.
 
-Default value: `$cobbler::params::package_ensure`
+Default value: `'installed'`
 
 ##### <a name="-cobbler--service"></a>`service`
 
@@ -136,7 +143,7 @@ Data type: `String`
 
 Name of the service this modules is responsible to manage.
 
-Default value: `$cobbler::params::service`
+Default value: `'cobblerd'`
 
 ##### <a name="-cobbler--service_ensure"></a>`service_ensure`
 
@@ -151,7 +158,7 @@ Enum[
 
 The state of the serivce in the system
 
-Default value: `$cobbler::params::service_ensure`
+Default value: `'running'`
 
 ##### <a name="-cobbler--service_enable"></a>`service_enable`
 
@@ -166,7 +173,7 @@ Variant[
 
 Whether a service should be enabled to start at boot
 
-Default value: `$cobbler::params::service_enable`
+Default value: `true`
 
 ##### <a name="-cobbler--config_path"></a>`config_path`
 
@@ -176,7 +183,7 @@ The absolute path where cobbler configuration files reside. This to prepend
 to config_file and config_modules options to build full paths to setttings
 and modules.conf files.
 
-Default value: `$cobbler::params::config_path`
+Default value: `'/etc/cobbler'`
 
 ##### <a name="-cobbler--config_file"></a>`config_file`
 
@@ -185,7 +192,7 @@ Data type: `String`
 The title of main cobbler configuration file. The full path to that file is
 build by prepending config_file with config_path parameters
 
-Default value: `$cobbler::params::config_file`
+Default value: `'settings'`
 
 ##### <a name="-cobbler--config_modules"></a>`config_modules`
 
@@ -194,7 +201,7 @@ Data type: `String`
 The title of cobbler modules configuration file. The full path to that file
 is build by prepending config_modules with config_path parameters
 
-Default value: `$cobbler::params::config_modules`
+Default value: `'modules.conf'`
 
 ##### <a name="-cobbler--default_cobbler_config"></a>`default_cobbler_config`
 
@@ -204,7 +211,119 @@ Hash that contains default configuration options for cobbler. No checks are
 performed to validate these configuration options. This is a left side hash
 to be merged with cobbler_config hash to build config_file for cobbler
 
-Default value: `$cobbler::params::default_cobbler_config`
+Default value:
+
+```puppet
+{
+    'allow_duplicate_hostnames'             => 0,
+    'allow_duplicate_ips'                   => 0,
+    'allow_duplicate_macs'                  => 0,
+    'allow_dynamic_settings'                => 0,
+    'anamon_enabled'                        => 0,
+    'authn_pam_service'                     => 'login',
+    'auth_token_expiration'                 => 3600,
+    'build_reporting_enabled'               => 0,
+    'build_reporting_sender'                => '',
+    'build_reporting_email'                 => ['root@localhost'],
+    'build_reporting_smtp_server'           => 'localhost',
+    'build_reporting_subject'               => '',
+    'build_reporting_ignorelist'            => [],
+    'cheetah_import_whitelist'              => ['random', 're', 'time'],
+    'createrepo_flags'                      => '-c cache -s sha',
+    # lint:ignore:80chars
+    'default_kickstart'                     => '/var/lib/cobbler/kickstarts/default.ks',
+    # lint:endignore
+    'default_name_servers'                  => [],
+    'default_ownership'                     => ['admin'],
+    # lint:ignore:80chars
+    'default_password_crypted'              => '$1$mF86/UHC$WvcIcX2t6crBz2onWxyac.',
+    # lint:endignore
+    'default_template_type'                 => 'cheetah',
+    'default_virt_bridge'                   => 'xenbr0',
+    'default_virt_file_size'                => 5,
+    'default_virt_ram'                      => 512,
+    'default_virt_type'                     => 'xenpv',
+    'enable_gpxe'                           => 0,
+    'enable_menu'                           => 1,
+    'func_auto_setup'                       => 0,
+    'func_master'                           => 'overlord.example.org',
+    'http_port'                             => 80,
+    'kernel_options'                        => {
+      'ksdevice' => 'bootif',
+      'lang'     => '',
+      'text'     => '',
+    },
+    'kernel_options_s390x'                  => {
+      'RUNKS'        => 1,
+      'ramdisk_size' => 40000,
+      'root'         => '/dev/ram0',
+      'ro'           => '' ,
+      'ip'           => false,
+      'vnc'          => '',
+    },
+    'ldap_server'                           => 'ldap.example.com',
+    'ldap_base_dn'                          => 'DC=example,DC=com',
+    'ldap_port'                             => 389,
+    'ldap_tls'                              => 1,
+    'ldap_anonymous_bind'                   => 1,
+    'ldap_search_bind_dn'                   => '',
+    'ldap_search_passwd'                    => '',
+    'ldap_search_prefix'                    => 'uid=',
+    'ldap_tls_cacertfile'                   => '',
+    'ldap_tls_keyfile'                      => '',
+    'ldap_tls_certfile'                     => '',
+    'mgmt_classes'                          => [],
+    'mgmt_parameters'                       => {
+      'from_cobbler' => 1,
+    },
+    'puppet_auto_setup'                     => 0,
+    'sign_puppet_certs_automatically'       => 0,
+    'puppetca_path'                         => '/usr/bin/puppet',
+    'remove_old_puppet_certs_automatically' => 0,
+    'manage_dhcp'                           => 0,
+    'manage_dns'                            => 0,
+    'bind_chroot_path'                      => '',
+    'bind_master'                           => '127.0.0.1',
+    'manage_tftpd'                          => 1,
+    'manage_rsync'                          => 0,
+    'manage_forward_zones'                  => [],
+    'manage_reverse_zones'                  => [],
+    'next_server'                           => '127.0.0.1',
+    'power_management_default_type'         => 'ipmitool',
+    'power_template_dir'                    => '/etc/cobbler/power',
+    'pxe_just_once'                         => 1,
+    'pxe_template_dir'                      => '/etc/cobbler/pxe',
+    'consoles'                              => '/var/consoles',
+    'redhat_management_type'                => 'off',
+    'redhat_management_server'              => 'xmlrpc.rhn.redhat.com',
+    'redhat_management_key'                 => '',
+    'redhat_management_permissive'          => 0,
+    'register_new_installs'                 => 0,
+    'reposync_flags'                        => '-l -n -d',
+    'restart_dns'                           => 1,
+    'restart_dhcp'                          => 1,
+    'run_install_triggers'                  => 1,
+    'scm_track_enabled'                     => 0,
+    'scm_track_mode'                        => 'git',
+    'server'                                => '127.0.0.1',
+    'client_use_localhost'                  => 0,
+    'client_use_https'                      => 0,
+    'snippetsdir'                           => '/var/lib/cobbler/snippets',
+    'template_remote_kickstarts'            => 0,
+    'virt_auto_boot'                        => 1,
+    'webdir'                                => '/var/www/cobbler',
+    'xmlrpc_port'                           => 25151,
+    'yum_post_install_mirror'               => 1,
+    'yum_distro_priority'                   => 1,
+    'yumdownloader_flags'                   => '--resolve',
+    'serializer_pretty_json'                => 0,
+    'replicate_rsync_options'               => '-avzH',
+    'replicate_repo_rsync_options'          => '-avzH',
+    'always_write_dhcp_entries'             => 0,
+    'proxy_url_ext'                         => '',
+    'proxy_url_int'                         => '',
+  }
+```
 
 ##### <a name="-cobbler--default_modules_config"></a>`default_modules_config`
 
@@ -214,7 +333,17 @@ Hash that contains default configuration options for cobbler modules.
 This is a left side hash  to be merged with cobbler_modules_config hash to
 build config_modules file  for cobbler
 
-Default value: `$cobbler::params::default_modules_config`
+Default value:
+
+```puppet
+{
+    'authentication' => { 'module' => 'authn_configfile' },
+    'authorization'  => { 'module' => 'authz_allowall' },
+    'dns'            => { 'module' => 'manage_bind' },
+    'dhcp'           => { 'module' => 'manage_isc' },
+    'tftpd'          => { 'module' => 'manage_in_tftpd' },
+  }
+```
 
 ##### <a name="-cobbler--distros"></a>`distros`
 
@@ -364,10 +493,6 @@ Enum[
 ```
 
 The state of the package.
-
-### <a name="cobbler--params"></a>`cobbler::params`
-
-Defines default values for variables inside whole cobbler class
 
 ### <a name="cobbler--service"></a>`cobbler::service`
 
