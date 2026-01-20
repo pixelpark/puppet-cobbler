@@ -3,11 +3,15 @@ require 'spec_helper'
 describe('cobbler::service') do
   let(:facts) {
     {
-      :fqdn            => 'test.example.com',
-      :hostname        => 'test',
-      :ipaddress       => '192.168.0.1',
-      :operatingsystem => 'CentOS',
-      :osfamily        => 'RedHat'
+      :networking => {
+        :fqdn     => 'test.example.com',
+        :hostname => 'test',
+        :ip       => '192.168.0.1'
+      },
+      :os         => {
+        :name   => 'RedHat',
+        :family => 'RedHat'
+      }
     }
   }
   context 'with defaults for all parameters' do

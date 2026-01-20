@@ -4,8 +4,8 @@ Puppet::Type.type(:cobbler_system).provide(:ruby) do
   desc "Provides cobbler system via json file artifacts"
 
   # Supports redhat only
-  confine    :osfamily => :redhat
-  defaultfor :osfamily => :redhat
+  confine    'os.family' => :redhat
+  defaultfor 'os.family' => :redhat
   commands   :cobbler  => 'cobbler'
 
   mk_resource_methods

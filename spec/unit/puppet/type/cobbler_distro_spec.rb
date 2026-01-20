@@ -18,7 +18,7 @@ describe Puppet::Type.type(:cobbler_distro) do
       :comment,
       :initrd,
       :kernel,
-      :ksmeta,
+      :autoinstall_meta,
       :owners,
     ].each do |prop|
       it "should have a #{prop} property" do
@@ -170,13 +170,13 @@ describe Puppet::Type.type(:cobbler_distro) do
         expect(type.should(:kernel)).nil?
       end
     end
-    context "ksmeta" do
+    context "autoinstall_meta" do
       it "should support hash" do
         Puppet::Type.type(:cobbler_distro).new(
           :name   => "testdistro1",
           :ensure => :present,
           :path   => '/path/to/mnt',
-          :ksmeta => {'key': 'value'},
+          :autoinstall_meta => {'key': 'value'},
         )
       end
       it "should rise error if not a hash" do
@@ -185,7 +185,7 @@ describe Puppet::Type.type(:cobbler_distro) do
             :name   => "testdistro1",
             :ensure => :present,
             :path   => '/path/to/mnt',
-            :ksmeta => 'not_a_hash',
+            :autoinstall_meta => 'not_a_hash',
           )
         }.to raise_error(Puppet::ResourceError)
       end
@@ -195,7 +195,7 @@ describe Puppet::Type.type(:cobbler_distro) do
           :ensure => :present,
           :path   => '/path/to/mnt',
         )
-        expect(type.should(:ksmeta)).to eq({})
+        expect(type.should(:autoinstall_meta)).to eq({})
       end
     end
     context "initrd" do
