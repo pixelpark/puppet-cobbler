@@ -130,12 +130,12 @@ Puppet::Type.type(:cobbler_distro).provide(:ruby) do
 
   #Setters
   def kernel=(value)
-    raise ArgumentError, '%s: not exists' % value unless File.exists? value
+    raise ArgumentError, '%s: not exist' % value unless File.exist? value
     self.set_field("kernel", value)
   end
 
   def initrd=(value)
-    raise ArgumentError, '%s: not exists' % value unless File.exists? value
+    raise ArgumentError, '%s: not exist' % value unless File.exist? value
     self.set_field("initrd", value)
   end
 

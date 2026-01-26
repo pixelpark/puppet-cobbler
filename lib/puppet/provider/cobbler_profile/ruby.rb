@@ -129,7 +129,7 @@ Puppet::Type.type(:cobbler_profile).provide(:ruby) do
 
   # Setters
   def autoinstall=(value)
-    raise ArgumentError, '%s: not exists' % value unless File.exists? value
+    raise ArgumentError, '%s: not exist' % value unless File.exist? value
     self.set_field("autoinstall", value)
   end
 
