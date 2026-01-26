@@ -1,12 +1,11 @@
-require 'xmlrpc/client'
-require 'fileutils'
+require 'json'
 
 Puppet::Type.type(:cobbler_system).provide(:ruby) do
-  desc "Provides cobbler system via cobbler_api"
+  desc "Provides cobbler system via json file artifacts"
 
   # Supports redhat only
-  confine    :osfamily => :redhat
-  defaultfor :osfamily => :redhat
+  confine    'os.family' => :redhat
+  defaultfor 'os.family' => :redhat
   commands   :cobbler  => 'cobbler'
 
   mk_resource_methods
@@ -18,10 +17,9 @@ Puppet::Type.type(:cobbler_system).provide(:ruby) do
   # Resources discovery
   def self.instances
     systems = []
-    cserver = XMLRPC::Client.new2('http://127.0.0.1/cobbler_api')
-    xmlresult = cserver.call('get_systems')
-    # get properties of current system to @property_hash
-    xmlresult.each do |system|
+    Dir.glob('/var/lib/cobbler/collections/systems/*\.json').each do |file|
+      # get properties of current system to @property_hash
+      system = JSON.parse(File.read(file))
       systems << new(
         :name                     => system["name"],
         :ensure                   => :present,

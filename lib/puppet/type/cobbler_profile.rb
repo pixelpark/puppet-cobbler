@@ -16,8 +16,8 @@ Puppet::Type.newtype(:cobbler_profile) do
     end
   end
 
-  newproperty(:kickstart) do
-    desc "Path to kickstart template"
+  newproperty(:autoinstall) do
+    desc "Path to autoinstall template"
     validate do |value|
       if value
         unless Pathname.new(value).absolute? 
@@ -27,7 +27,7 @@ Puppet::Type.newtype(:cobbler_profile) do
     end
   end
   autorequire(:file) do
-    self[:kickstart] if self[:kickstart] and Pathname.new(self[:kickstart]).absolute?
+    self[:autoinstall] if self[:autoinstall] and Pathname.new(self[:autoinstall]).absolute?
   end
 
   # Properties
@@ -65,32 +65,32 @@ Puppet::Type.newtype(:cobbler_profile) do
     self[:repos] if self[:repos]
   end
 
-  newproperty(:kopts) do
+  newproperty(:kernel_options) do
     desc "Kernel Options"
     defaultto({})
     validate do |value|
       unless value.is_a? Hash
-        raise ArgumentError, "Kopts parameter accepts only Hash"
+        raise ArgumentError, "kernel_options parameter accepts only Hash"
       end
     end
   end
 
-  newproperty(:kopts_post) do
+  newproperty(:kernel_options_post) do
     desc "Governs kernel options on the installed OS"
     defaultto({})
     validate do |value|
       unless value.is_a? Hash
-        raise ArgumentError, "Kopts_post parameter accepts only Hash"
+        raise ArgumentError, "kernel_options_post parameter accepts only Hash"
       end
     end
   end
 
-  newproperty(:ksmeta) do
+  newproperty(:autoinstall_meta) do
     desc "Sets variables available for use in templates"
     defaultto({})
     validate do |value|
       unless value.is_a? Hash
-        raise ArgumentError, "ksmeta parameter accepts only a Hash"
+        raise ArgumentError, "autoinstall_meta parameter accepts only a Hash"
       end
     end
     def change_to_s(currentvalue, newvalue)

@@ -14,10 +14,10 @@ describe Puppet::Type.type(:cobbler_profile) do
   context "when validating properties" do
     [
       :distro,
-      :kickstart,
-      :kopts,
-      :kopts_post,
-      :ksmeta,
+      :autoinstall,
+      :kernel_options,
+      :kernel_options_post,
+      :autoinstall_meta,
       :repos,
       :dhcp_tag
     ].each do |prop|
@@ -102,9 +102,9 @@ describe Puppet::Type.type(:cobbler_profile) do
       end
     end
     [
-      :kopts,
-      :kopts_post,
-      :ksmeta
+      :kernel_options,
+      :kernel_options_post,
+      :autoinstall_meta
     ].each do |param|
       context param do
         it "should support hash value" do
